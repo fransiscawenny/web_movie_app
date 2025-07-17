@@ -1,19 +1,27 @@
+import { Movie } from '@/types/Movie';
 import axios from 'axios';
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 
-export const fetchMovies = async (CATEGORY: string, page: number) => {
+export const getImageUrl = (path: string | null | undefined) =>
+    // path ? `https://image.tmdb.org/t/p/original${path}` : '';
+    path ? `https://image.tmdb.org/t/p/original/${path}` : '';
+
+export const fetchMovies = async (
+    CATEGORY: string,
+    page: number
+): Promise<Movie[]> => {
     const res = await axios.get(
         `${BASE_URL}/movie/${CATEGORY}?api_key=${API_KEY}&page=${page}`
     );
-    return res.data;
+    return res?.data?.results;
 };
 
 export const getMovieDetails = async (id: string) => {
-    const res = await axios.get(
-        `${BASE_URL}/movie/${id}?api_key=${API_KEY}&append_to_response=credits`
-    );
+    const res = await axios.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`, {
+        params: { append_to_response: 'credits,videos' },
+    });
     return res.data;
 };
 
@@ -21,5 +29,5 @@ export const searchMovies = async (query: string, page = 1) => {
     const res = await axios.get(
         `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}&page=${page}`
     );
-    return res.data;
+    return res?.data?.results;
 };

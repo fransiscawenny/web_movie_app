@@ -1,27 +1,40 @@
 import moment from 'moment';
 import { Movie } from '@/types/Movie';
 import { Link } from 'react-router-dom';
-
+import { getImageUrl } from '@/services/api';
+import noImage from '@/assets/no-image.png';
 interface MovieCardProps {
     movie: Movie;
+    width: string;
 }
-export default function MovieCard({ movie }: MovieCardProps) {
+export default function MovieCard({
+    movie,
+    width = 'w-[200px]',
+}: MovieCardProps) {
     return (
-        <Link to={`/movie/${movie.id}`}>
-            <div className="bg-white rounded-lg shadow-md p-4">
+        <Link
+            to={`/movie/${movie?.id}`}
+            className={`transition-transform duration-200 hover:scale-105 ${width}`}
+        >
+            <div className="relative aspect-[2/3] rounded-md overflow-hidden">
                 <img
-                    src={
-                        movie.poster_path
-                            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                            : 'https://via.placeholder.com/500x750?text=No+Image+Available'
-                    }
-                    alt={movie.title}
-                    className="w-full h-auto rounded"
+                    src={movie?.poster_path ? getImageUrl(movie?.poster_path):noImage}
+                    alt={movie?.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
                 />
-                <h2 className="text-lg font-semibold mt-2">{movie.title}</h2>
-                <p className="text-gray-600">
-                    Release Year: {moment(movie.release_date).get('year')}
-                </p>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute bottom-0 p-4">
+                        <h3 className="text-sm font-semibold line-clamp-2">
+                            {movie?.title}
+                        </h3>
+                        <p className="text-xs text-gray-300">
+                            Release Year:{' '}
+                            {moment(movie?.release_date).get('year') ||
+                                'Unknown'}
+                        </p>
+                    </div>
+                </div>
             </div>
         </Link>
     );
