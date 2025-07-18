@@ -41,7 +41,7 @@ export default function HeroHeader({ movie }: HeroProps) {
                     </div>
                 ) : (
                     <img
-                        src={getImageUrl(movie.backdrop_path, 'original/')}
+                        src={getImageUrl(movie.backdrop_path, 'original')}
                         alt={movie.title}
                         className="w-full h-full object-cover"
                     />

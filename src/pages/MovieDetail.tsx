@@ -48,7 +48,7 @@ export default function MovieDetail() {
         <div className="relative w-full h-screen text-white">
             <div className="absolute inset-0">
                 <img
-                    src={getImageUrl(movie?.backdrop_path, 'original/')}
+                    src={getImageUrl(movie?.backdrop_path, 'original')}
                     alt={movie?.title}
                     className="w-full h-full object-cover"
                 />
@@ -98,7 +98,7 @@ export default function MovieDetail() {
                                         <img
                                             src={getImageUrl(
                                                 actor?.profile_path,
-                                                'original/'
+                                                'original'
                                             )}
                                             alt={actor?.name}
                                             className="w-14 h-14 object-cover rounded-full mx-auto"

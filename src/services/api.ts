@@ -1,12 +1,11 @@
 import { Movie } from '@/types/Movie';
 import axios from 'axios';
 
-const API_KEY = process.env.REACT_APP_API_KEY;
+const API_KEY = 'acc482b12552305330d59615618acf55';
+// const API_KEY = import.meta.env.VITE_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 
 export const getImageUrl = (path: string | null | undefined, size = 'w500') =>
-    // path ? `https://image.tmdb.org/t/p/original${path}` : '';
-    // path ? `https://image.tmdb.org/t/p/original/${path}` : '';
     path ? `https://image.tmdb.org/t/p/${size}${path}` : '';
 
 export const fetchMovies = async (

@@ -38,7 +38,6 @@ export default function Home() {
                     topRated,
                     upcoming,
                 });
-                console.log(movies);
                 setLoading(false);
             } catch (err) {
                 setError('Failed to load movies. Please try again later.');

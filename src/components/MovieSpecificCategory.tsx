@@ -1,4 +1,3 @@
-// CategoryPage.tsx
 import { categories } from '@/helpers/dataConstant';
 import { fetchMovies } from '@/services/api';
 import { useAppStore } from '@/store/useAppStore';
@@ -39,7 +38,6 @@ export default function MovieSpecificCategory() {
                 if (!category) return;
                 const results = await fetchMovies(category, 1);
                 setMovies(results);
-                console.log(movies);
                 setLoading(false);
             } catch (err: any) {
                 setError(
