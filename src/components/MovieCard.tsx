@@ -18,7 +18,11 @@ export default function MovieCard({
         >
             <div className="relative aspect-[2/3] rounded-md overflow-hidden">
                 <img
-                    src={movie?.poster_path ? getImageUrl(movie?.poster_path):noImage}
+                    src={
+                        movie?.poster_path
+                            ? getImageUrl(movie?.poster_path)
+                            : noImage
+                    }
                     alt={movie?.title}
                     className="w-full h-full object-cover"
                     loading="lazy"

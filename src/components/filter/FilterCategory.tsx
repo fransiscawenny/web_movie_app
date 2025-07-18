@@ -2,30 +2,25 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Filter } from 'lucide-react'; // optional icon library
 import { useMovieStore } from '@/store/useMovieStore';
-
-const categories = [
-    { name: 'Now Playing', slug: 'now_playing' },
-    { name: 'Popular', slug: 'popular' },
-    { name: 'Top Rated', slug: 'top_rated' },
-    { name: 'Upcoming', slug: 'upcoming' },
-];
+import { categories } from '@/helpers/dataConstant';
 
 export default function FilterCategory() {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
-    const { setSelectedCategory } = useMovieStore();
-
-    const handleClickOutside = (event: MouseEvent) => {
-        if (
-            dropdownRef.current &&
-            !dropdownRef.current.contains(event.target as Node)
-        ) {
-            setOpen(false);
-        }
-    };
+    const setSelectedCategory = useMovieStore(
+        (state) => state.setSelectedCategory
+    );
 
     useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target as Node)
+            ) {
+                setOpen(false);
+            }
+        };
         document.addEventListener('mousedown', handleClickOutside);
         return () =>
             document.removeEventListener('mousedown', handleClickOutside);

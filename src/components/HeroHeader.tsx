@@ -1,7 +1,7 @@
 import { getImageUrl, getMovieDetails } from '@/services/api';
 import { Movie } from '@/types/Movie';
 import { Info } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 interface HeroProps {
@@ -10,21 +10,20 @@ interface HeroProps {
 export default function HeroHeader({ movie }: HeroProps) {
     const [trailerKey, setTrailerKey] = useState<string | null>(null);
 
-    const loadTrailer = async () => {
-        try {
-            const response = await getMovieDetails(movie.id?.toString());
-            console.log('🚀 ~ loadTrailer ~ response:', response);
-            const trailers = response.videos?.results.find(
-                (video: any) => video.type === 'Trailer'
-            );
-            setTrailerKey(trailers?.key || null);
-        } catch (error) {
-            console.error('Failed to load trailer:', error);
-        }
-    };
-
+    
     useEffect(() => {
         if (!movie?.id) return;
+        const loadTrailer = async () => {
+            try {
+                const response = await getMovieDetails(movie.id?.toString());
+                const trailers = response.videos?.results.find(
+                    (video: any) => video.type === 'Trailer'
+                );
+                setTrailerKey(trailers?.key || null);
+            } catch (error) {
+                console.error('Failed to load trailer:', error);
+            }
+        };
         loadTrailer();
     }, [movie.id]);
 
@@ -43,7 +42,7 @@ export default function HeroHeader({ movie }: HeroProps) {
                     </div>
                 ) : (
                     <img
-                        src={getImageUrl(movie.backdrop_path)}
+                        src={getImageUrl(movie.backdrop_path,'original/')}
                         alt={movie.title}
                         className="w-full h-full object-cover"
                     />

@@ -4,16 +4,17 @@ import axios from 'axios';
 const API_KEY = process.env.REACT_APP_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 
-export const getImageUrl = (path: string | null | undefined) =>
+export const getImageUrl = (path: string | null | undefined, size = 'w500') =>
     // path ? `https://image.tmdb.org/t/p/original${path}` : '';
-    path ? `https://image.tmdb.org/t/p/original/${path}` : '';
+    // path ? `https://image.tmdb.org/t/p/original/${path}` : '';
+    path ? `https://image.tmdb.org/t/p/${size}${path}` : '';
 
 export const fetchMovies = async (
-    CATEGORY: string,
+    category: string,
     page: number
 ): Promise<Movie[]> => {
     const res = await axios.get(
-        `${BASE_URL}/movie/${CATEGORY}?api_key=${API_KEY}&page=${page}`
+        `${BASE_URL}/movie/${category}?api_key=${API_KEY}&page=${page}`
     );
     return res?.data?.results;
 };

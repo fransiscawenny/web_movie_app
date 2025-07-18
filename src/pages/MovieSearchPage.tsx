@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import Loading from '@/components/general/Loading';
+import { searchMovies } from '@/services/api';
+import { Movie } from '@/types/Movie';
+import { useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSearchParams } from 'react-router-dom';
 import MovieCard from '../components/MovieCard';
-import { Movie } from '@/types/Movie';
-import { fetchMovies, searchMovies } from '@/services/api';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import Loading from '@/components/general/Loading';
 
 export default function MovieSearchPage() {
     const [searchParams] = useSearchParams();
@@ -12,20 +12,6 @@ export default function MovieSearchPage() {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState<number>(1);
-
-    const handleSearch = async () => {
-        if (!query) return;
-        try {
-            setLoading(true);
-            setPage(1);
-            const results = await searchMovies(query, 1);
-            setMovies(results);
-        } catch (error) {
-            console.error('Error searching movies:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const loadMoreMovies = async () => {
         try {
@@ -39,6 +25,19 @@ export default function MovieSearchPage() {
     };
 
     useEffect(() => {
+        const handleSearch = async () => {
+            if (!query) return;
+            try {
+                setLoading(true);
+                setPage(1);
+                const results = await searchMovies(query, 1);
+                setMovies(results);
+            } catch (error) {
+                console.error('Error searching movies:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
         handleSearch();
     }, [query]);
 

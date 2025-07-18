@@ -1,31 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { getImageUrl, getMovieDetails } from '@/services/api';
+import { useAppStore } from '@/store/useAppStore';
 import { MovieDetailInterface } from '@/types/MovieDetail';
 import { ArrowLeft } from 'lucide-react';
-import Loading from '@/components/general/Loading';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function MovieDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [movie, setMovie] = useState<MovieDetailInterface>();
-    const [loading, setLoading] = useState(true);
-
-    const fetchMovieDetails = async () => {
-        setLoading(true);
-        try {
-            if (!id) return;
-            const movieDetails = await getMovieDetails(id);
-            setMovie(movieDetails);
-        } catch (error) {
-            console.error('Failed to fetch movie details:', error);
-            setMovie(undefined); // Reset movie state on error
-        } finally {
-            setLoading(false);
-        }
-    };
+    const setLoading = useAppStore((s) => s.setLoading);
+    const setError = useAppStore((s) => s.setError);
 
     useEffect(() => {
+        const fetchMovieDetails = async () => {
+            setLoading(true);
+            try {
+                if (!id) return;
+                const movieDetails = await getMovieDetails(id);
+                setMovie(movieDetails);
+            } catch (error) {
+                console.error('Error fetching movie details:', error);
+                setError(
+                    'Failed to fetch movie details. Please try again later.'
+                );
+                setMovie(undefined); // Reset movie state on error
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchMovieDetails();
     }, [id]);
 
@@ -41,14 +44,11 @@ export default function MovieDetail() {
             .sort((a, b) => a.order - b.order) || [];
     const genres = movie?.genres.map((g) => g.name).join(', ');
 
-    if (loading) {
-        return <Loading />;
-    }
     return (
         <div className="relative w-full h-screen text-white">
             <div className="absolute inset-0">
                 <img
-                    src={getImageUrl(movie?.backdrop_path)}
+                    src={getImageUrl(movie?.backdrop_path, 'original/')}
                     alt={movie?.title}
                     className="w-full h-full object-cover"
                 />
@@ -62,8 +62,8 @@ export default function MovieDetail() {
                     <ArrowLeft className="inline mr-2" /> Back
                 </button>
 
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="flex flex-col gap-4">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                    <div className="flex flex-col gap-4 w-[60%]">
                         <h1 className="text-5xl font-bold">{movie?.title}</h1>
                         <div className="flex flex-row items-center gap-6">
                             <div className="text-base inline-flex items-center space-x-1">
@@ -84,7 +84,7 @@ export default function MovieDetail() {
                             {movie?.overview}
                         </p>
                     </div>
-                    <div className="flex flex-col justify-between gap-2">
+                    <div className="flex flex-col items-start justify-between gap-2 w-[40%]">
                         <div className="flex flex-col">
                             <h2 className="text-xl font-semibold text-white mt-6 mb-2">
                                 Cast
@@ -97,7 +97,8 @@ export default function MovieDetail() {
                                     >
                                         <img
                                             src={getImageUrl(
-                                                actor?.profile_path
+                                                actor?.profile_path,
+                                                'original/'
                                             )}
                                             alt={actor?.name}
                                             className="w-14 h-14 object-cover rounded-full mx-auto"

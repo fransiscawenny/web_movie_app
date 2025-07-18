@@ -16,3 +16,7 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+html {
+  scroll-padding-top: 100px; /* Adjust based on Hero height */
+}

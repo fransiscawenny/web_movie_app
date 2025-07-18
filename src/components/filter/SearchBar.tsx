@@ -1,23 +1,28 @@
 import { useMovieStore } from '@/store/useMovieStore';
 import { X } from 'lucide-react';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function SearchBar() {
     const { searchTerm, setSearchTerm } = useMovieStore();
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         const trimmed = searchTerm.trim();
+        const currentParams = new URLSearchParams(location.search);
+        const currentQuery = currentParams.get('q') || '';
 
         const handler = setTimeout(() => {
-            if (trimmed) {
+            if (trimmed && trimmed !== currentQuery) {
                 navigate(`/search?q=${encodeURIComponent(trimmed)}`);
+            } else if (location.pathname === '/search' && !trimmed) {
+                navigate('/');
             }
         }, 500);
 
         return () => clearTimeout(handler);
-    }, [searchTerm, navigate]);
+    }, [searchTerm, location.search, location.pathname, navigate]);
 
     const clearInput = () => {
         setSearchTerm('');
@@ -29,8 +34,8 @@ export default function SearchBar() {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search for movies..."
-                className="w-full pr-10 px-4 py-2 rounded-full bg-black/30 placeholder-gray-400 text-white border border-gray-600 focus:outline-none focus:border-gray-500"
+                placeholder="Search title movie..."
+                className="w-full pr-10 px-4 py-1 rounded-lg bg-black/30 placeholder-gray-400 text-white border border-gray-600 focus:outline-none focus:border-gray-500"
             />
 
             {searchTerm && (

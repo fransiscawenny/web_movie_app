@@ -6,10 +6,16 @@ import MovieSearchPage from './pages/MovieSearchPage';
 import { useMovieStore } from './store/useMovieStore';
 import { useEffect } from 'react';
 import MovieSpecificCategory from './components/MovieSpecificCategory';
+import WithLoadingAndError from './components/general/WithLoadingAndError ';
+import { useResetOnRouteChange } from './components/hooks/useResetOnRouteChange';
+import ScrollToTop from './components/general/ScrollToTop';
+import FloatingScrollTopButton from './components/general/FloatingScrollTopButton';
 
 function App() {
     const location = useLocation();
-    const { setSearchTerm } = useMovieStore();
+    const setSearchTerm = useMovieStore((state) => state.setSearchTerm);
+
+    useResetOnRouteChange();
 
     useEffect(() => {
         // Clear query when leaving /search
@@ -20,16 +26,20 @@ function App() {
 
     return (
         <div className="min-h-screen text-white bg-black">
-            <Navbar />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/movie/:id" element={<MovieDetail />} />
-                <Route path="/search" element={<MovieSearchPage />} />
-                <Route
-                    path="/category/:category"
-                    element={<MovieSpecificCategory />}
-                />
-            </Routes>
+            <ScrollToTop />
+            <FloatingScrollTopButton />
+            <WithLoadingAndError>
+                <Navbar />
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/movie/:id" element={<MovieDetail />} />
+                    <Route path="/search" element={<MovieSearchPage />} />
+                    <Route
+                        path="/category/:category"
+                        element={<MovieSpecificCategory />}
+                    />
+                </Routes>
+            </WithLoadingAndError>
         </div>
     );
 }
