@@ -10,6 +10,15 @@ import WithLoadingAndError from './components/general/WithLoadingAndError ';
 import { useResetOnRouteChange } from './components/hooks/useResetOnRouteChange';
 import ScrollToTop from './components/general/ScrollToTop';
 import FloatingScrollTopButton from './components/general/FloatingScrollTopButton';
+import AnimationPageWrapper from './components/general/AnimationPageWrapper';
+import { AnimatePresence } from 'framer-motion';
+
+const routes = [
+    { path: '/', element: <Home /> },
+    { path: '/movie/:id', element: <MovieDetail /> },
+    { path: '/search', element: <MovieSearchPage /> },
+    { path: '/category/:category', element: <MovieSpecificCategory /> },
+];
 
 function App() {
     const location = useLocation();
@@ -18,11 +27,12 @@ function App() {
     useResetOnRouteChange();
 
     useEffect(() => {
-        // Clear query when leaving /search
-        if (location.pathname !== '/search') {
+        const hasQuery =
+            location.pathname === '/search' && location.search.includes('q=');
+        if (!hasQuery) {
             setSearchTerm('');
         }
-    }, [location.pathname, setSearchTerm]);
+    }, [location.pathname, location.search, setSearchTerm]);
 
     return (
         <div className="min-h-screen text-white bg-black">
@@ -30,15 +40,23 @@ function App() {
             <FloatingScrollTopButton />
             <WithLoadingAndError>
                 <Navbar />
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/movie/:id" element={<MovieDetail />} />
-                    <Route path="/search" element={<MovieSearchPage />} />
-                    <Route
-                        path="/category/:category"
-                        element={<MovieSpecificCategory />}
-                    />
-                </Routes>
+                <AnimatePresence mode="wait">
+                    <Routes location={location}>
+                        {routes.map(({ path, element }) => (
+                            <Route
+                                key={path}
+                                path={path}
+                                element={
+                                    <AnimationPageWrapper
+                                        key={location.pathname}
+                                    >
+                                        {element}
+                                    </AnimationPageWrapper>
+                                }
+                            />
+                        ))}
+                    </Routes>
+                </AnimatePresence>
             </WithLoadingAndError>
         </div>
     );

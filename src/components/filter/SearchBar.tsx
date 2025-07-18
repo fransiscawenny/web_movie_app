@@ -9,6 +9,14 @@ export default function SearchBar() {
     const location = useLocation();
 
     useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const q = params.get('q');
+        if (location.pathname === '/search' && q && q !== searchTerm) {
+            setSearchTerm(q);
+        }
+    }, [location.search, location.pathname, setSearchTerm]);
+
+    useEffect(() => {
         const trimmed = searchTerm.trim();
         const currentParams = new URLSearchParams(location.search);
         const currentQuery = currentParams.get('q') || '';

@@ -10,7 +10,6 @@ interface HeroProps {
 export default function HeroHeader({ movie }: HeroProps) {
     const [trailerKey, setTrailerKey] = useState<string | null>(null);
 
-    
     useEffect(() => {
         if (!movie?.id) return;
         const loadTrailer = async () => {
@@ -28,7 +27,7 @@ export default function HeroHeader({ movie }: HeroProps) {
     }, [movie.id]);
 
     return (
-        <div className="relative w-full h-[85vh] overflow-hidden no-scrollbar">
+        <div className="relative w-full h-screen overflow-hidden no-scrollbar">
             <div className="absolute inset-0">
                 {trailerKey ? (
                     <div className="relative w-full h-full">
@@ -42,14 +41,15 @@ export default function HeroHeader({ movie }: HeroProps) {
                     </div>
                 ) : (
                     <img
-                        src={getImageUrl(movie.backdrop_path,'original/')}
+                        src={getImageUrl(movie.backdrop_path, 'original/')}
                         alt={movie.title}
                         className="w-full h-full object-cover"
                     />
                 )}
                 <div className="absolute h-screen inset-0 bg-gradient-to-r from-black via-black/50 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-black z-10" />
             </div>
-            <div className="absolute bottom-0 left-0 right-0 top-44 flex items-center px-4 sm:px-8 md:px-16">
+            <div className="absolute z-20 top-1/3 left-4 space-y-4 text-white px-4 sm:px-8 md:px-16">
                 <div className="max-w-2xl">
                     <h1 className="text-2xl md:text-5xl font-bold text-white mb-4">
                         {movie.title}

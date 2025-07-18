@@ -74,7 +74,7 @@ export default function ListMovieHome({
                         <MovieCard
                             key={movie.id}
                             movie={movie}
-                            width="w-[200px] flex-shrink-0"
+                            width="w-[150px] flex-shrink-0"
                         />
                     ))}
                 </div>

@@ -51,11 +51,14 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-black">
+        <div className="relative min-h-screen bg-black">
             {movies.nowPlaying?.length > 0 && (
-                <HeroHeader movie={movies.nowPlaying[0]} />
+                <div className="relative z-0">
+                    <HeroHeader movie={movies.nowPlaying[0]} />
+                </div>
             )}
-            <div className="space-y-8 pb-8">
+
+            <div className="-mt-24 relative z-10 space-y-8 px-4 pb-8">
                 <ListMovieHome
                     title="Now Playing"
                     movies={movies.nowPlaying}

@@ -9,14 +9,14 @@ interface MovieCardProps {
 }
 export default function MovieCard({
     movie,
-    width = 'w-[200px]',
+    width = 'w-[150px]',
 }: MovieCardProps) {
     return (
         <Link
             to={`/movie/${movie?.id}`}
             className={`transition-transform duration-200 hover:scale-105 ${width}`}
         >
-            <div className="relative aspect-[2/3] rounded-md overflow-hidden">
+            <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-md">
                 <img
                     src={
                         movie?.poster_path
@@ -34,7 +34,7 @@ export default function MovieCard({
                         </h3>
                         <p className="text-xs text-gray-300">
                             Release Year:{' '}
-                            {moment(movie?.release_date).get('year') ||
+                            {moment(movie?.release_date).format('YYYY') ||
                                 'Unknown'}
                         </p>
                     </div>
